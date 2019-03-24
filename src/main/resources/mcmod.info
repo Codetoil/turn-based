@@ -1,0 +1,34 @@
+[
+  {
+    "modid": "examplemod",
+    "name": "Example Mod",
+    "description": "Example placeholder mod.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "ExampleDude"
+    ],
+    "credits": "The Forge and FML guys, for making this example",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  },
+  {
+    "modid": "turn_based",
+    "name": "Turn Based Combat",
+    "description": "Adds turn based combat to minecraft 1.12",
+    "version": "0.0",
+    "mcversion": "1.12-1.12.2",
+    "url": "https://littoil.github.io",
+    "updateUrl": "",
+    "authorList": [
+      "Littoil"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
