@@ -2,11 +2,11 @@ package io.github.littoil.turnbased.world;
 
 import io.github.littoil.turnbased.TurnBased;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ITeleporter;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -72,10 +72,12 @@ public class LitTeleporter implements ITeleporter {
 
 	public void placeEntityUnsafe(Entity entityIn)
 	{
-		if (entityIn instanceof EntityPlayerMP) {
-			((EntityPlayerMP) entityIn).connection.setPlayerLocation(xVal, yVal, zVal, entityIn.rotationYaw, entityIn.rotationPitch);
-		} else {
-			entityIn.setLocationAndAngles(xVal, yVal, zVal, entityIn.rotationYaw, entityIn.rotationPitch);
+		if (!FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld().isRemote) {
+			if (entityIn instanceof EntityPlayerMP) {
+				((EntityPlayerMP) entityIn).connection.setPlayerLocation(xVal, yVal, zVal, entityIn.rotationYaw, entityIn.rotationPitch);
+			} else {
+				entityIn.setLocationAndAngles(xVal, yVal, zVal, entityIn.rotationYaw, entityIn.rotationPitch);
+			}
 		}
 	}
 

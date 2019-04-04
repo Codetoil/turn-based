@@ -96,40 +96,42 @@ public class TurningEntity {
 	}
 
 	public void teleportTo(int laterDimension) {
-		try {
-			MinecraftServer minecraftServer = FMLCommonHandler.instance().getMinecraftServerInstance();
-			int formerDimension = this.entity.dimension;
-			WorldServer oldWorld = minecraftServer.getWorld(this.entity.dimension);
-			WorldServer newWorld = minecraftServer.getWorld(laterDimension);
-			ITeleporter teleporter = new LitTeleporter(initialXVal, (laterDimension == 8748) ? 4.0 : initialYVal, initialZVal);
+		if (!FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld().isRemote) {
+			try {
+				MinecraftServer minecraftServer = FMLCommonHandler.instance().getMinecraftServerInstance();
+				int formerDimension = this.entity.dimension;
+				WorldServer oldWorld = minecraftServer.getWorld(this.entity.dimension);
+				WorldServer newWorld = minecraftServer.getWorld(laterDimension);
+				ITeleporter teleporter = new LitTeleporter(initialXVal, (laterDimension == 8748) ? 4.0 : initialYVal, initialZVal);
 
-			logTeleport(formerDimension, laterDimension);
+				logTeleport(formerDimension, laterDimension);
 
-			TurnBased.getLogger().debug("Teleporting...");
-			boolean dead = this.entity.isDead;
-			this.entity.isDead = false;
-			Entity oldEntity = this.entity;
-			Entity newEntity = internalTeleport(oldEntity, oldWorld, newWorld, formerDimension, laterDimension, teleporter);
-			TurnBased.getLogger().debug(oldEntity);
-			TurnBased.getLogger().debug(oldEntity.isDead);
-			TurnBased.getLogger().debug(newEntity);
-			oldEntity.isDead = dead;
-			newEntity.isDead = dead;
+				TurnBased.getLogger().debug("Teleporting...");
+				boolean dead = this.entity.isDead;
+				this.entity.isDead = false;
+				Entity oldEntity = this.entity;
+				Entity newEntity = internalTeleport(oldEntity, oldWorld, newWorld, formerDimension, laterDimension, teleporter);
+				TurnBased.getLogger().debug(oldEntity);
+				TurnBased.getLogger().debug(oldEntity.isDead);
+				TurnBased.getLogger().debug(newEntity);
+				oldEntity.isDead = dead;
+				newEntity.isDead = dead;
 
-			logTeleport(formerDimension, laterDimension);
+				logTeleport(formerDimension, laterDimension);
 
-			if (LitWorldMethods.containsEntity(this.uuid, oldWorld)) {
-				oldWorld.removeEntityDangerously(oldEntity);
-				TurnBased.getLogger().debug("Removed entity \"" + this.uuid.toString() + "\" from old dimension");
+				if (LitWorldMethods.containsEntity(this.uuid, oldWorld)) {
+					oldWorld.removeEntityDangerously(oldEntity);
+					TurnBased.getLogger().debug("Removed entity \"" + this.uuid.toString() + "\" from old dimension");
+				}
+
+				logTeleport(formerDimension, laterDimension);
+
+				TurnBased.getLogger().info("");
+				this.entity = newEntity;
 			}
-
-			logTeleport(formerDimension, laterDimension);
-
-			TurnBased.getLogger().info("");
-			this.entity = newEntity;
-		} catch (Throwable t)
-		{
-			throw new ReportedException(new CrashReport("Failed to teleport Entity \"" + entity.getName() + "\"!", t));
+			catch (Throwable t) {
+				throw new ReportedException(new CrashReport("Failed to teleport Entity \"" + entity.getName() + "\"!", t));
+			}
 		}
 
 	}
