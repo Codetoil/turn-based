@@ -14,6 +14,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import java.util.Collections;
 import java.util.UUID;
 
 public class TurningEntity {
@@ -91,7 +92,16 @@ public class TurningEntity {
 		}
 		else
 		{
-			return entity.changeDimension(newWorldId, teleporter);
+			Entity newEntity = entity.changeDimension(newWorldId, teleporter);
+			if (newEntity == null)
+			{
+				newWorld.loadEntities(Collections.singleton(entity));
+				return entity;
+			}
+			else
+			{
+				return newEntity;
+			}
 		}
 	}
 
