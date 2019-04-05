@@ -62,7 +62,6 @@ public class EventHandler {
 			//event.getRayTraceResult().
 			if (event.getEntity().dimension != 8748) // NOT IN PVP DIMENSION
 			{
-				event.setCanceled(true);
 				event.getEntity().isDead = false;
 				new TurningEntity(event.getEntity()).teleportTo(8748);
 			}
